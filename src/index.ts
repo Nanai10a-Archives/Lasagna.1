@@ -1,15 +1,14 @@
 import fastify from "fastify";
 import fastify_socket from "fastify-socket.io";
 import { Socket } from "socket.io";
-import * as fs from "fs";
-import { readFileSync } from "fs";
+import fs from "fs";
 import path from "path";
 
 const server = fastify({
   logger: true,
   https: {
-    key: readFileSync(path.join(__dirname + "/key.pem")),
-    cert: readFileSync(path.join(__dirname + "/cert.pem")),
+    key: fs.readFileSync(path.join(__dirname + "/key.pem")),
+    cert: fs.readFileSync(path.join(__dirname + "/cert.pem")),
   },
 });
 server.register(fastify_socket);
@@ -35,4 +34,9 @@ const run = async () => {
   }
 };
 
-run();
+run()
+  .then()
+  .catch((reason) => {
+    console.error(reason);
+    process.exit(1);
+  });
