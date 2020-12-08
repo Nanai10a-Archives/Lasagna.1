@@ -27,7 +27,7 @@ server.get("/", async (req, rep) => {
 
 const run = async () => {
   try {
-    await server.listen(3000);
+    await server.listen(3000, "0.0.0.0");
   } catch (e) {
     server.log.error(e);
     process.exit(1);
