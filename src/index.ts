@@ -1,8 +1,9 @@
 import fastify from "fastify";
 import fastify_socket from "fastify-socket.io";
-import { Socket } from "socket.io";
 import fs from "fs";
 import path from "path";
+import * as front from "./front";
+import * as back from "./back";
 
 const server = fastify({
   logger: true,
@@ -11,18 +12,13 @@ const server = fastify({
     cert: fs.readFileSync(path.join(__dirname + "/cert.pem")),
   },
 });
+
 server.register(fastify_socket);
-
-server.get("/", async (req, rep) => {
-  rep.type("text/html");
-  rep.send(fs.readFileSync(path.join(__dirname + "/index.html")).toString());
-
-  server.io.on("connection", (socket: Socket) => {
-    console.log("a user connected");
-    socket.on("chat message", (message) => {
-      server.io.emit("chat message", message);
-    });
-  });
+server.register(front.func, {
+  prefix: "/front",
+});
+server.register(back.func, {
+  prefix: "/back",
 });
 
 const run = async () => {

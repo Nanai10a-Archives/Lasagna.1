@@ -55,7 +55,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.1/socket.io.min.js"></script>
 <script>
   $(function() {
-    let socket = io();
+    let socket = io("https://localhost.nanai10a.net:3000/back");
     $("form").submit((e) => {
       e.preventDefault();
       socket.emit("chat message", $("#m").val());
