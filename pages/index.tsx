@@ -1,5 +1,7 @@
 import React from "react";
 
-export default (): React.ReactElement => {
+const index: React.FC = (): React.ReactElement => {
   return <div>Hello, Fastify!</div>;
 };
+
+export default index;

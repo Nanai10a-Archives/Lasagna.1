@@ -1,9 +1,11 @@
 {
   "compilerOptions": {
-    "target": "es2020",
-    "module": "commonjs",
+    "target": "esnext",
+    "module": "esnext",
     "lib": [
-      "es2020"
+      "esnext",
+      "dom",
+      "dom.iterable"
     ],
     "removeComments": true,
     "importHelpers": true,
@@ -19,7 +21,8 @@
     "jsx": "preserve",
     "allowJs": true,
     "noEmit": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "sourceMap": true
   },
   "include": [
     "next-env.d.ts",
@@ -28,5 +31,17 @@
   ],
   "exclude": [
     "node_modules"
-  ]
+  ],
+  "ts-node": {
+    "compilerOptions": {
+      "target": "esnext",
+      "module": "commonjs",
+      "lib": [
+        "esnext"
+      ],
+      "types": [
+        "@types/node"
+      ]
+    }
+  }
 }
