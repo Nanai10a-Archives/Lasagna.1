@@ -7,11 +7,11 @@
     "start": "node --enable-source-maps dist/index.js",
     "build": "tsc -p src",
     "dev": "ts-node-dev --respawn src/index.ts",
-    "lint": "eslint --ignore-path .gitignore '**/*.ts'",
-    "lint:fix": "eslint --fix --ignore-path .gitignore '**/*.ts'"
+    "lint": "eslint --ignore-path .gitignore '**/*.{ts,tsx}'",
+    "lint:fix": "eslint --fix --ignore-path .gitignore '**/*.{ts,tsx}'"
   },
   "lint-staged": {
-    "*.ts": "eslint --fix"
+    "**/*.{ts,tsx}": "eslint --fix"
   },
   "husky": {
     "hooks": {
@@ -19,14 +19,20 @@
     }
   },
   "dependencies": {
-    "@types/socket.io": "^2.1.11",
     "fastify": "^3.9.1",
+    "fastify-nextjs": "^5.1.0",
     "fastify-socket.io": "^1.0.1",
+    "next": "^10.0.4",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
     "socket.io": "^3.0.3",
     "tslib": "^2.0.3"
   },
   "devDependencies": {
     "@types/node": "^14.14.9",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "@types/socket.io": "^2.1.12",
     "@typescript-eslint/eslint-plugin": "^4.8.1",
     "@typescript-eslint/parser": "^4.8.1",
     "eslint": "^7.14.0",
