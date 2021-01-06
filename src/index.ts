@@ -1,9 +1,9 @@
 import fastify from "fastify";
+import fastify_nextjs from "fastify-nextjs";
 import fastify_socket from "fastify-socket.io";
+import socket from "socket.io";
 import fs from "fs";
 import path from "path";
-import * as front from "./front";
-import * as back from "./back";
 
 const server = fastify({
   logger: true,
@@ -13,12 +13,20 @@ const server = fastify({
   },
 });
 
-server.register(fastify_socket);
-server.register(front.func, {
-  prefix: "/front",
+server.register(fastify_nextjs).after(() => {
+  server.next("/");
 });
-server.register(back.func, {
-  prefix: "/back",
+
+server.register(fastify_socket);
+
+server.get("/ws", async () => {
+  server.io.on("connection", (socket: socket.Socket) => {
+    console.log("a user connected");
+
+    socket.on("chat message", (message) => {
+      socket.broadcast.emit("chat message", message);
+    });
+  });
 });
 
 const run = async () => {
