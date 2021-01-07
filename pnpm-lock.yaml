@@ -2,7 +2,6 @@ dependencies:
   '@types/socket.io-client': 1.4.34
   fastify: 3.9.1
   fastify-nextjs: 5.1.0_next@10.0.4
-  fastify-socket.io: 1.0.1
   next: 10.0.4_c3eb1f092c5b2b789fc020efea0b6454
   react: 17.0.1
   react-dom: 17.0.1_react@17.0.1
@@ -2441,13 +2440,6 @@ packages:
     dev: false
     resolution:
       integrity: sha512-I+Oaj6p9oiRozbam30sh39BiuiqBda7yK2nmSPVwDCfIBlKnT8YB3MY+pRQc2Fcd07bf6KPGklHJaQ2Qu81TYQ==
-  /fastify-socket.io/1.0.1:
-    dependencies:
-      fastify-plugin: 2.3.4
-      socket.io: 3.0.3
-    dev: false
-    resolution:
-      integrity: sha512-reKlR8MSnTl6VtRHrwCtMnaN1eOEKuZBizvHktKclmrFAgii/B5Ts0gy/Dffi8xmcS//70oUQ5PQR2PVYvvOqw==
   /fastify-warning/0.2.0:
     dev: false
     resolution:
@@ -6418,7 +6410,6 @@ specifiers:
   eslint-plugin-react: ^7.22.0
   fastify: ^3.9.1
   fastify-nextjs: ^5.1.0
-  fastify-socket.io: ^1.0.1
   husky: ^4.3.0
   lint-staged: ^10.5.2
   next: ^10.0.4
