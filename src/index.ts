@@ -1,6 +1,5 @@
 import fastify from "fastify";
 import fastify_nextjs from "fastify-nextjs";
-import fastify_socket from "fastify-socket.io";
 import socket from "socket.io";
 import fs from "fs";
 import path from "path";
@@ -13,19 +12,17 @@ const server = fastify({
   },
 });
 
+const io = new socket.Server(server.server);
+
 server.register(fastify_nextjs).after(() => {
   server.next("/");
 });
 
-server.register(fastify_socket);
+io.on("connection", (connection: socket.Socket) => {
+  console.log("a user connected");
 
-server.get("/ws", async () => {
-  server.io.on("connection", (socket: socket.Socket) => {
-    console.log("a user connected");
-
-    socket.on("chat message", (message) => {
-      socket.broadcast.emit("chat message", message);
-    });
+  connection.on("chat message", (message) => {
+    io.emit("chat message", message);
   });
 });
 
