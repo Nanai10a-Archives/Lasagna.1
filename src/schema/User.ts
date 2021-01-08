@@ -4,7 +4,7 @@ type User = {
   // FIXME: これなに
   readonly id: string;
   // twitterの[@...]みたいな
-  subId: string;
+  sub_id: string;
   // 表示名
   name: string;
 };
