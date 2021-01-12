@@ -1,43 +1,21 @@
-import fastify from "fastify";
-import fastify_nextjs from "fastify-nextjs";
+import Next from "next";
 import socket from "socket.io";
-import fs from "fs";
-import path from "path";
 
-const server = fastify({
-  logger: true,
-  https: {
-    key: fs.readFileSync(path.join(__dirname + "/key.pem")),
-    cert: fs.readFileSync(path.join(__dirname + "/cert.pem")),
-  },
-});
-
-const io = new socket.Server(server.server);
-
-server.register(fastify_nextjs).after(() => {
-  server.next("/");
-});
-
-io.on("connection", (connection: socket.Socket) => {
-  console.log("a user connected");
-
-  connection.on("chat message", (message) => {
-    io.emit("chat message", message);
-  });
-});
+import fastify_setup from "./init/fastify";
+import socket_setup from "./init/socket";
+import next_setup from "./init/next";
 
 const run = async () => {
-  try {
-    await server.listen(3000, "0.0.0.0");
-  } catch (e) {
-    server.log.error(e);
-    process.exit(1);
-  }
+  const fastify_next = fastify_setup();
+  const fastify_socket = fastify_setup();
+
+  socket_setup(new socket.Server(fastify_socket.server));
+  await next_setup(Next({ dev: process.env.NODE_ENV === "development" }), fastify_next);
+
+  await Promise.all([fastify_next.listen(4434, "0.0.0.0"), fastify_socket.listen(3000, "0.0.0.0")]);
 };
 
-run()
-  .then()
-  .catch((reason) => {
-    console.error(reason);
-    process.exit(1);
-  });
+run().catch((reason) => {
+  console.error(reason);
+  process.exit(1);
+});

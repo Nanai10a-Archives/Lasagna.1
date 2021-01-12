@@ -1,15 +1,13 @@
-import React, { ChangeEvent, FormEvent, PropsWithChildren, useReducer, useState } from "react";
+import React from "react";
+import * as Next from "next";
 import io from "socket.io-client";
-import { GetStaticProps } from "next";
 
 type IndexStaticProps = Record<string, never>;
 
-const Index: React.FC<IndexStaticProps> = (
-  props: PropsWithChildren<IndexStaticProps>,
-): React.ReactElement => {
-  const [socket, setSocket] = useState<SocketIOClient.Socket | null>(null);
-  const [input, setInput] = useState<string>("");
-  const [state, addMessage] = useReducer(
+const Index: React.FC<IndexStaticProps> = (): React.ReactElement => {
+  const [socket, setSocket] = React.useState<SocketIOClient.Socket | null>(null);
+  const [input, setInput] = React.useState<string>("");
+  const [state, addMessage] = React.useReducer(
     (state: { messages: Array<string> }, message: string) => {
       state.messages.push(message);
       return { ...state };
@@ -18,18 +16,19 @@ const Index: React.FC<IndexStaticProps> = (
   );
 
   if (socket == null) {
-    const _socket = io.connect({
+    const _socket = io.connect("wss://localhost.nanai10a.net:3000", {
       secure: true,
       reconnection: true,
       rejectUnauthorized: false,
       transports: ["websocket"],
-      autoConnect: true,
+      autoConnect: false,
     });
 
+    _socket.on("connect", () => console.log("connected!"));
     _socket.on("chat message", addMessage);
-    _socket.on("connect_error", (error: unknown) => {
-      console.log(error);
-    });
+    _socket.on("connect_error", console.error);
+
+    _socket.connect();
 
     setSocket(_socket);
   }
@@ -43,7 +42,7 @@ const Index: React.FC<IndexStaticProps> = (
         })}
       </ul>
       <form
-        onSubmit={(event: FormEvent<HTMLFormElement>) => {
+        onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
           event.preventDefault();
           socket?.emit("chat message", input);
           setInput("");
@@ -52,7 +51,7 @@ const Index: React.FC<IndexStaticProps> = (
       >
         <input
           value={input}
-          onChange={(event: ChangeEvent<HTMLInputElement>) => {
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             event.preventDefault();
             setInput(event.target.value);
           }}
@@ -64,9 +63,11 @@ const Index: React.FC<IndexStaticProps> = (
   );
 };
 
+// noinspection JSUnusedGlobalSymbols
 export default Index;
 
-export const getStaticProps: GetStaticProps<IndexStaticProps> = async () => {
+// noinspection JSUnusedGlobalSymbols
+export const getStaticProps: Next.GetStaticProps<IndexStaticProps> = async () => {
   return {
     props: {},
   };

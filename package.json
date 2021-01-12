@@ -4,11 +4,12 @@
   "description": "",
   "license": "MIT",
   "scripts": {
-    "start": "node --enable-source-maps dist/index.js",
-    "build": "tsc -p src",
-    "dev": "ts-node-dev --respawn src/index.ts",
-    "lint": "eslint --ignore-path .gitignore '**/*.{ts,tsx}'",
-    "lint:fix": "eslint --fix --ignore-path .gitignore '**/*.{ts,tsx}'"
+    "rm:next": "rimraf .next",
+    "build:next": "next build",
+    "run:prod": "env-cmd -e prod ts-node src/index.ts",
+    "run:dev": "env-cmd -e dev ts-node-dev --ignore-watch .next --respawn src/index.ts",
+    "prod": "run-s rm:next build:next run:prod",
+    "dev": "run-s run:dev"
   },
   "lint-staged": {
     "**/*.{ts,tsx}": "eslint --fix"
@@ -20,12 +21,13 @@
   },
   "dependencies": {
     "fastify": "^3.9.1",
-    "fastify-nextjs": "^5.1.0",
     "next": "^10.0.4",
+    "pino-pretty": "^4.3.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "socket.io": "^3.0.3",
     "socket.io-client": "^3.0.5",
+    "ts-node": "^9.1.1",
     "tslib": "^2.0.3"
   },
   "devDependencies": {
@@ -36,13 +38,16 @@
     "@types/socket.io-client": "^1.4.34",
     "@typescript-eslint/eslint-plugin": "^4.8.1",
     "@typescript-eslint/parser": "^4.8.1",
+    "env-cmd": "^10.1.0",
     "eslint": "^7.14.0",
     "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.22.0",
     "husky": "^4.3.0",
     "lint-staged": "^10.5.2",
+    "npm-run-all": "^4.1.5",
     "prettier": "^2.2.0",
+    "rimraf": "^3.0.2",
     "ts-node-dev": "^1.0.0",
     "typescript": "^4.1.2"
   },
