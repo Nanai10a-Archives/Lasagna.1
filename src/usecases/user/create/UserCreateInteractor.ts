@@ -1,8 +1,8 @@
-import IUserCreateUsecase from "./IUserCreateUsecase";
 import UserCreateInputData from "./UserCreateInputData";
 import UserCreateOutputData from "./UserCreateOutputData";
+import IUsecase from "../../IUsecase";
 
-const UserCreateInteractor: IUserCreateUsecase = (
+const UserCreateInteractor: IUsecase<UserCreateInputData, UserCreateOutputData> = (
   input_data: UserCreateInputData,
 ): UserCreateOutputData => {
   return {
