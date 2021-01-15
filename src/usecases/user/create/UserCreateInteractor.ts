@@ -1,15 +1,8 @@
-import UserCreateInputData from "./UserCreateInputData";
-import UserCreateOutputData from "./UserCreateOutputData";
-import IUsecase from "../../IUsecase";
+import { Ok, Err } from "../../../utils/Result";
+import IUserCreateUsecase from "./IUserCreateUsecase";
 
-const UserCreateInteractor: IUsecase<UserCreateInputData, UserCreateOutputData> = (
-  input_data: UserCreateInputData,
-): UserCreateOutputData => {
-  return {
-    id: "",
-    name: "",
-    uuid: "",
-  };
+const UserCreateInteractor: IUserCreateUsecase = (input_data) => {
+  return new Ok({ id: "", name: "", uuid: "" });
 };
 
 export default UserCreateInteractor;
