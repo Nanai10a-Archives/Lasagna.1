@@ -1,12 +1,12 @@
-class LasagnaError<T extends string, O> {
+class LasagnaError<T extends string, P> {
   readonly type: T;
   readonly message: string;
-  readonly others: O;
+  readonly props: P;
 
-  constructor(t: T, message: string, others: O) {
+  constructor(t: T, message: string, props: P) {
     this.type = t;
     this.message = message;
-    this.others = others;
+    this.props = props;
   }
 }
 
