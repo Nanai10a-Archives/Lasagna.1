@@ -372,6 +372,22 @@ class Comp extends React.Component<Record<string, never>, RTCComponentState & Co
           </button>
         </div>
 
+        <div>
+          <button
+            onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+              e.preventDefault();
+
+              this.state.socket.echo((id: string) => {
+                this.setState({ remoteId: id });
+                console.log("returned!");
+                console.log(id);
+              });
+            }}
+          >
+            experimental.
+          </button>
+        </div>
+
         {/* --- inputs --- */}
 
         <input
@@ -480,7 +496,13 @@ class Comp extends React.Component<Record<string, never>, RTCComponentState & Co
     const peer = new RTCPeerConnection();
 
     peer.ontrack = (e: RTCTrackEvent) => {
-      this.setState({ remoteStream: e.streams[0] ?? null });
+      if (e.streams[0]) return this.setState({ remoteStream: e.streams[0] });
+
+      if (e.track) {
+        const stream = new MediaStream();
+        stream.addTrack(e.track);
+        return this.setState({ remoteStream: stream });
+      }
     };
 
     this.state.localStream?.getTracks().forEach((track) => {
@@ -493,6 +515,7 @@ class Comp extends React.Component<Record<string, never>, RTCComponentState & Co
 
 class Socket {
   private socket: SocketIOClient.Socket;
+
   constructor(eventHandlers: SocketEventHandlers) {
     const socket = io.connect("wss://localhost.nanai10a.net:3000", {
       secure: true,
@@ -513,6 +536,10 @@ class Socket {
 
   connect = (callback: (id: string) => void) => {
     this.socket.emit("signaling_connect", callback);
+  };
+
+  echo = (callback: (id: string) => void) => {
+    this.socket.emit("signaling_test_echo", callback);
   };
 
   exists = (callback: (isExists: boolean) => void) => {
